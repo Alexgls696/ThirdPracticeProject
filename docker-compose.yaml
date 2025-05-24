@@ -3,19 +3,44 @@ services:
     image: postgres:16
     restart: always
     environment:
-       POSTGRES_DB : ${DB_NAME}
-       POSTGRES_USER : ${DB_USERNAME}
-       POSTGRES_PASSWORD : ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - user_details_data:/var/lib/postgresql/data
     ports:
       - "5434:5432"
+    networks:
+      - user-details-network
+
 
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}" ]
-      interval: 30s
+      interval: 15s
       timeout: 10s
       retries: 5
 
+  user-details-service:
+    build:
+      context: ./UserDetailsService #Путь к docker-file
+    image: user-details-app #имя образа в результате сборки
+
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8081:8081"
+    depends_on:
+      user-details-db:
+        condition: service_healthy
+    networks:
+      - user-details-network
+
+
 volumes:
   user_details_data:
+
+networks:
+  user-details-network:
+    driver: bridge

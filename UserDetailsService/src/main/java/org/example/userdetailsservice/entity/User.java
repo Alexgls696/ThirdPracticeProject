@@ -18,6 +18,7 @@ public class User {
 
     private String name;
     private String surname;
+    private String patronymic;
     private String email;
     private String gender;
     private String passport;
@@ -29,6 +30,7 @@ public class User {
     public User(NewUserPayload payload) {
         this.name = payload.name();
         this.surname = payload.surname();
+        this.patronymic = payload.patronymic();
         this.email = payload.email();
         this.gender = payload.gender();
         this.passport = payload.passport();

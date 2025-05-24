@@ -2,7 +2,7 @@ package org.example.userdetailsservice.controller.payload;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record NewUserPayload(
+public record FindUserByDataPayload(
         @NotBlank(message = "{errors.validation.name_id_blank}")
         String name,
 
@@ -11,16 +11,12 @@ public record NewUserPayload(
 
         String patronymic,
 
-        String email,
-
-        String gender,
-
         @NotBlank(message = "{errors.validation.passport_is_blank}")
         String passport,
 
-        @NotBlank(message = "{errors.validation.inn_is_blank}")
-        String inn,
+        String email,
 
-        String driversLicense
+        @NotBlank(message = "{errors.validation.inn_is_blank}")
+        String inn
 ) {
 }

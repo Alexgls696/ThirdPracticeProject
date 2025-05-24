@@ -1,11 +1,14 @@
 package org.example.userdetailsservice.service;
 
+import org.example.userdetailsservice.controller.payload.FindUserByDataPayload;
 import org.example.userdetailsservice.entity.User;
 
 public interface UsersService {
     Iterable<User> findAll();
 
     User save(User user);
+
+    User findUserByData(FindUserByDataPayload payload);
 
     User findById(int id);
 
@@ -14,4 +17,6 @@ public interface UsersService {
     User findByPassport(String passport);
 
     void deleteById(int id);
+
+    void deleteByPassport(String passport);
 }
