@@ -1,0 +1,7 @@
+server:
+  port: 8080
+
+services:
+  user-details-service-url: http://localhost:8081/
+  credit-story-service-url: http://localhost:8082/
+

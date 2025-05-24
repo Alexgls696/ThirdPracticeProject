@@ -1,12 +1,12 @@
-package org.example.userdetailsservice.exception_handling;
+package org.alexgls.centerservice.exception_handling;
 
 import lombok.RequiredArgsConstructor;
-import org.example.userdetailsservice.exceptions.NoSuchUserException;
+import org.alexgls.centerservice.client.exception.BindException;
+import org.alexgls.centerservice.client.exception.NoSuchUserException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,8 +16,8 @@ import java.util.Locale;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
-
     private final MessageSource messageSource;
+
 
     @ExceptionHandler(NoSuchUserException.class)
     public ResponseEntity<ProblemDetail> handleNoSuchUserException(NoSuchUserException exception, Locale locale) {
@@ -33,16 +33,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleBindException(BindException exception, Locale locale) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
                 messageSource.getMessage("errors.bind", new Object[0], "errors.bind", locale));
-        problemDetail.setProperty("errors", exception
-                .getBindingResult()
-                .getAllErrors()
-                .stream()
-                .map(ObjectError::getDefaultMessage)
-                .toList());
+        problemDetail.setProperty("errors", exception.getErrors());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(problemDetail);
     }
-
-
 }
