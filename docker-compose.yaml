@@ -38,9 +38,31 @@ services:
       - user-details-network
 
 
+  credit_story_db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: ${CREDIT_STORY_DB_NAME}
+      POSTGRES_USER: ${CREDIT_STORY_USER}
+      POSTGRES_PASSWORD: ${CREDIT_STORY_PASSWORD}
+    ports:
+      - "5435:5432"
+    volumes:
+      - credit_story_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${CREDIT_STORY_USER} -d ${CREDIT_STORY_DB_NAME}" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+
+
 volumes:
   user_details_data:
+  credit_story_data:
 
 networks:
   user-details-network:
+    driver: bridge
+  credit_story_network:
     driver: bridge

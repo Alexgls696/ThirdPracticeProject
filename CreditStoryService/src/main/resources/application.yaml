@@ -1,0 +1,8 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5435/${CREDIT_STORY_DB_NAME:credit-stories}"
+    username: "${CREDIT_STORY_USER:alexgls}"
+    password: "${CREDIT_STORY_PASSWORD:AS04SERa1}"
