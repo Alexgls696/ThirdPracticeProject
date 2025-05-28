@@ -13,8 +13,8 @@ public class CorsConfiguration {
 
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**") // Разрешить доступ к API
-                        .allowedOrigins("http://localhost:8083") // Указать фронтенд-адрес
+                registry.addMapping("/api/**")
+                        .allowedOrigins("http://localhost:80,http://localhost")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);

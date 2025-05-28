@@ -3,7 +3,6 @@ FROM maven:3.8.6-openjdk-18 as builder
 WORKDIR /app
 COPY .mvn/ .mvn/
 COPY mvnw pom.xml ./
-
 COPY src src
 RUN ./mvnw clean package -DskipTests
 
