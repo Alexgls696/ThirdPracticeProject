@@ -12,7 +12,7 @@ public class CorsConfiguration {
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
 
-            @Value("${production.url}")
+            @Value("${PROD_IP_ADDRESS:http://158.160.142.207}")
             private String productionUrl;
 
             @Override

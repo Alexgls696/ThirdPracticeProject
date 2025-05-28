@@ -4,6 +4,3 @@ server:
 services:
   user-details-service-url: ${USER_DETAILS_SERVICE_URL}
   credit-story-service-url: ${CREDIT_STORY_SERVICE_URL}
-
-production:
-  url: ${PROD_IP_ADDRESS}
