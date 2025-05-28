@@ -15,6 +15,17 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment findById(long id) {
-        return paymentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Payment with id %d not found".formatted(id)));
+        return paymentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Payment with id %d not found".formatted(id)));
+    }
+
+    @Override
+    public Iterable<Payment> findAllByContractId(long contractId) {
+        return paymentRepository.findAllByContractId(contractId);
+    }
+
+    @Override
+    public Iterable<Payment> findAllByScheduleId(long scheduleId) {
+        return paymentRepository.findAllByScheduleId(scheduleId);
     }
 }

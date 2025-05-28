@@ -1,5 +1,7 @@
 package org.alexgls.centerservice.config;
 
+import org.alexgls.centerservice.client.CreditStoryRestClient;
+import org.alexgls.centerservice.client.CreditStoryRestClientImpl;
 import org.alexgls.centerservice.client.UserDetailsRestClient;
 import org.alexgls.centerservice.client.UserDetailsRestClientImpl;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,4 +19,13 @@ public class RestClientsConfig {
                 .baseUrl(userDetailsServiceUrl)
                 .build());
     }
+
+    @Bean
+    public CreditStoryRestClient creditStoryRestClient(@Value("${services.credit-story-service-url}") String creditStoryServiceUrl) {
+        return new CreditStoryRestClientImpl(RestClient
+                .builder()
+                .baseUrl(creditStoryServiceUrl)
+                .build());
+    }
+
 }

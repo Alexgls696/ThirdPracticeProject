@@ -5,6 +5,8 @@ import org.example.creditstoryservice.entity.CreditContract;
 import org.example.creditstoryservice.service.CreditContractService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+
 @RestController
 @RequestMapping("api/credit-story/credit-contract")
 @RequiredArgsConstructor
@@ -16,4 +18,5 @@ public class CreditContractController {
     public Iterable<CreditContract> getCreditContractsByUserId(@PathVariable("id") int id) {
         return creditContractService.findCreditContractByClientId(id);
     }
+
 }

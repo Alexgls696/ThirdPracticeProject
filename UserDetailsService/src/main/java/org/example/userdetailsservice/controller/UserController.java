@@ -21,5 +21,4 @@ public class UserController {
         usersService.deleteById(id);
     }
 
-
 }

@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+
 import java.util.Date;
+import java.util.List;
+
 
 @Entity
 @Table(name = "credit_contracts")
@@ -22,7 +25,7 @@ public class CreditContract {
     private int clientId;
 
     @Column(name = "bank_id", nullable = false)
-    private Long bankId;
+    private Integer bankId;
 
     @Column(name = "contract_number", nullable = false, unique = true)
     private String contractNumber;
@@ -51,5 +54,16 @@ public class CreditContract {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+    @Transient
+    private Bank bank;
+
+    @Transient
+    private Iterable<DelinquencyHistory>delinquencies;
+
+    @Transient
+    private Iterable<Payment>payments;
+
+    @Transient
+    private Iterable<PaymentSchedule>paymentSchedules;
 
 }

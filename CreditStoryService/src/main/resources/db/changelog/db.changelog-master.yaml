@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/changeset/load-test-data.sql
   - include:
       file: db/changelog/changeset/load-additional-data.sql
+  - include:
+      file: db/changelog/changeset/load-additional-data-two.sql

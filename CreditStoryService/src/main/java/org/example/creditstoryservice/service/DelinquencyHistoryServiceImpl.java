@@ -17,4 +17,9 @@ public class DelinquencyHistoryServiceImpl implements DelinquencyHistoryService 
     public DelinquencyHistory findDelinquencyHistoryById(long id) {
         return delinquencyHistoryRepository.findById(id).orElseThrow(() -> new NoSuchElementException("DelinquencyHistory with id %d not found".formatted(id)));
     }
+
+    @Override
+    public Iterable<DelinquencyHistory> findAllByContractId(long contractId) {
+        return delinquencyHistoryRepository.findByContractId(contractId);
+    }
 }

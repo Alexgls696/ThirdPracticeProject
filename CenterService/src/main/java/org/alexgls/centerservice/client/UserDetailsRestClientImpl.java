@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.alexgls.centerservice.client.exception.BindException;
 import org.alexgls.centerservice.client.exception.NoSuchUserException;
-import org.alexgls.centerservice.client.payload.FindUserByDataPayload;
+import org.alexgls.centerservice.controller.payload.FindUserByDataPayload;
 import org.alexgls.centerservice.entity.User;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
@@ -31,7 +31,7 @@ public class UserDetailsRestClientImpl implements UserDetailsRestClient {
                     .retrieve()
                     .body(User.class);
         } catch (HttpClientErrorException.NotFound exception) {
-            return null;
+            throw new NoSuchUserException("User with email " + email + " not found");
         }
     }
 
@@ -45,14 +45,14 @@ public class UserDetailsRestClientImpl implements UserDetailsRestClient {
                     .retrieve()
                     .body(User.class);
         } catch (HttpClientErrorException.NotFound exception) {
-            return null;
+            throw new NoSuchUserException("User with passport " + passport + " not found");
         }
     }
 
     @Override
     public User findUserByUserdata(FindUserByDataPayload payload) {
         try {
-           return restClient
+            return restClient
                     .post()
                     .uri("api/users/find-by-userdata")
                     .body(payload)
@@ -77,6 +77,19 @@ public class UserDetailsRestClientImpl implements UserDetailsRestClient {
             }
         } catch (HttpClientErrorException.NotFound exception) {
             throw new NoSuchUserException("Пользователь с такими данными не найден");
+        }
+    }
+
+    @Override
+    public User findUserById(int id) {
+        try {
+            return restClient
+                    .get()
+                    .uri("api/users/{id}", id)
+                    .retrieve()
+                    .body(User.class);
+        } catch (HttpClientErrorException.NotFound exception) {
+            throw new NoSuchUserException("User with id " + id + " not found");
         }
     }
 }

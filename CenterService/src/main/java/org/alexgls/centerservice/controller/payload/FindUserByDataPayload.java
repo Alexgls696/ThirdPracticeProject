@@ -1,4 +1,4 @@
-package org.alexgls.centerservice.client.payload;
+package org.alexgls.centerservice.controller.payload;
 
 
 public record FindUserByDataPayload(

@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="CreditStoryService" />
         <module name="UserDetailsService" />
+        <module name="ClientApplication" />
         <module name="CenterService" />
       </profile>
     </annotationProcessing>
@@ -16,6 +17,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="CenterService" options="-parameters" />
+      <module name="ClientApplication" options="-parameters" />
       <module name="CreditStoryService" options="-parameters" />
       <module name="UserDetailsService" options="-parameters" />
     </option>

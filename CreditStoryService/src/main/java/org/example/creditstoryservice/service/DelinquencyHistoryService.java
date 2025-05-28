@@ -4,4 +4,5 @@ import org.example.creditstoryservice.entity.DelinquencyHistory;
 
 public interface DelinquencyHistoryService {
     DelinquencyHistory findDelinquencyHistoryById(long id);
+    Iterable<DelinquencyHistory> findAllByContractId(long contractId);
 }

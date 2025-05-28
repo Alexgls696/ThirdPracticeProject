@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PaymentRepository extends CrudRepository<Payment, Long> {
+    Iterable<Payment> findAllByContractId(long contractId);
+    Iterable<Payment>findAllByScheduleId(long scheduleId);
 }

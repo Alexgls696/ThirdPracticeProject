@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DelinquencyHistoryRepository extends CrudRepository<DelinquencyHistory, Long> {
+    Iterable<DelinquencyHistory> findByContractId(long contractId);
 }

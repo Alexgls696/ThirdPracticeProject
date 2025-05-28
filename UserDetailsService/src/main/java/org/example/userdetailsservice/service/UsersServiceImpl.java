@@ -32,7 +32,8 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User findById(int id) {
-        return usersRepository.findById(id).orElseThrow(() -> new NoSuchUserException("User with id %d not found".formatted(id)));
+        return usersRepository.findById(id)
+                .orElseThrow(() -> new NoSuchUserException("User with id %d not found".formatted(id)));
     }
 
     @Override
