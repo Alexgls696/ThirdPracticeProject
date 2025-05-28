@@ -8,13 +8,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class CorsConfiguration {
+    @Value("${PROD_IP_ADDRESS:http://158.160.142.207}")
+
+
+    private String productionUrl;
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
-
-            @Value("${PROD_IP_ADDRESS:http://158.160.142.207}")
-            private String productionUrl;
-
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
