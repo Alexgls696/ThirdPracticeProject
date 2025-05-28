@@ -80,6 +80,7 @@ services:
     environment:
       USER_DETAILS_SERVICE_URL: ${USER_DETAILS_SERVICE_URL}
       CREDIT_STORY_SERVICE_URL: ${CREDIT_STORY_SERVICE_URL}
+      PROD_IP_ADDRESS: ${PROD_IP_ADDRESS}
     ports:
       - "8080:8080"
     networks:
