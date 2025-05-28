@@ -1,6 +1,5 @@
 package org.alexgls.centerservice.config;
 
-import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CorsConfiguration {
     @Value("${PROD_IP_ADDRESS:http://158.160.142.207}")
     private String productionUrl;
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -18,7 +18,7 @@ public class CorsConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 System.out.println("PRODUCTIONURL : "+productionUrl);
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:80", "http://localhost", "http://158.160.142.207")
+                        .allowedOrigins("http://localhost:80", "http://localhost", productionUrl)
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
