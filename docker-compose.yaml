@@ -11,8 +11,7 @@ services:
     ports:
       - "5434:5432"
     networks:
-      - user-details-network
-
+      - services-network
 
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}" ]
@@ -35,34 +34,72 @@ services:
       user-details-db:
         condition: service_healthy
     networks:
-      - user-details-network
+      - services-network
 
 
-  credit_story_db:
+  credit-story-db:
     image: postgres:16
     restart: always
     environment:
       POSTGRES_DB: ${CREDIT_STORY_DB_NAME}
-      POSTGRES_USER: ${CREDIT_STORY_USER}
-      POSTGRES_PASSWORD: ${CREDIT_STORY_PASSWORD}
+      POSTGRES_USER: ${CREDIT_STORY_DB_USER}
+      POSTGRES_PASSWORD: ${CREDIT_STORY_DB_PASSWORD}
     ports:
       - "5435:5432"
     volumes:
       - credit_story_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${CREDIT_STORY_USER} -d ${CREDIT_STORY_DB_NAME}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${CREDIT_STORY_DB_USER} -d ${CREDIT_STORY_DB_NAME}" ]
       interval: 15s
       timeout: 10s
       retries: 5
 
+    networks:
+      services-network:
 
+  credit-story-service:
+    build:
+      context: ./CreditStoryService
+    image: credit-story-app
+    environment:
+      CREDIT_STORY_DB_NAME: ${CREDIT_STORY_DB_NAME}
+      CREDIT_STORY_DB_USER: ${CREDIT_STORY_DB_USER}
+      CREDIT_STORY_DB_PASSWORD: ${CREDIT_STORY_DB_PASSWORD}
+    ports:
+      - "8082:8082"
+    depends_on:
+      credit-story-db:
+        condition: service_healthy
+    networks:
+      - services-network
+
+  center-service:
+    build:
+      context: ./CenterService
+    image: center-service-app
+    environment:
+      USER_DETAILS_SERVICE_URL: ${USER_DETAILS_SERVICE_URL}
+      CREDIT_STORY_SERVICE_URL: ${CREDIT_STORY_SERVICE_URL}
+      PROD_IP_ADDRESS: ${PROD_IP_ADDRESS}
+    ports:
+      - "8080:8080"
+    networks:
+      services-network:
+
+  client-application:
+    build:
+      context: ./ClientApplication
+    image: client-application-app
+    environment:
+      USER_DETAILS_SERVICE_URL: ${USER_DETAILS_SERVICE_URL}
+      CREDIT_STORY_SERVICE_URL: ${CREDIT_STORY_SERVICE_URL}
+    ports:
+      - "80:8083"
 
 volumes:
   user_details_data:
   credit_story_data:
 
 networks:
-  user-details-network:
-    driver: bridge
-  credit_story_network:
+  services-network:
     driver: bridge
