@@ -2,6 +2,7 @@ package org.example.userdetailsservice.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.userdetailsservice.controller.payload.FindByPassportDataPayload;
 import org.example.userdetailsservice.controller.payload.FindUserByDataPayload;
 import org.example.userdetailsservice.controller.payload.NewUserPayload;
 import org.example.userdetailsservice.entity.User;
@@ -46,6 +47,19 @@ public class UsersController {
             }
         }
         return usersService.findUserByData(payload);
+    }
+
+    @PostMapping("find-by-passport-data")
+    public User findUserByPassportData(@Valid @RequestBody FindByPassportDataPayload payload,
+                                       BindingResult bindingResult) throws BindException {
+        if (bindingResult.hasErrors()) {
+            if (bindingResult instanceof BindException exception) {
+                throw exception;
+            } else {
+                throw new BindException(bindingResult);
+            }
+        }
+        return usersService.findByPassportData(payload);
     }
 
     @PostMapping

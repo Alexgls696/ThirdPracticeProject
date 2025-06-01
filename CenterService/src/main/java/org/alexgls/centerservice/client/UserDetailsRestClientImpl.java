@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.alexgls.centerservice.client.exception.BindException;
 import org.alexgls.centerservice.client.exception.NoSuchUserException;
+import org.alexgls.centerservice.controller.payload.FindByPassportDataPayload;
 import org.alexgls.centerservice.controller.payload.FindUserByDataPayload;
 import org.alexgls.centerservice.entity.User;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
@@ -90,6 +92,27 @@ public class UserDetailsRestClientImpl implements UserDetailsRestClient {
                     .body(User.class);
         } catch (HttpClientErrorException.NotFound exception) {
             throw new NoSuchUserException("User with id " + id + " not found");
+        }
+    }
+
+    @Override
+    public User findUserByPassportData(FindByPassportDataPayload payload) {
+        try {
+            return restClient
+                    .post()
+                    .uri("api/users/find-by-passport-data")
+                    .body(payload)
+                    .retrieve()
+                    .body(User.class);
+        } catch (HttpClientErrorException.BadRequest exception) {
+            ProblemDetail detail = exception.getResponseBodyAs(ProblemDetail.class);
+            var errors = (List<String>) detail
+                    .getProperties()
+                    .get("errors");
+            throw new BindException("Ошибка валидации данных", errors);
+        }
+        catch (HttpClientErrorException.NotFound exception) {
+            throw new NoSuchUserException("Пользователь с заданными данными не найден");
         }
     }
 }

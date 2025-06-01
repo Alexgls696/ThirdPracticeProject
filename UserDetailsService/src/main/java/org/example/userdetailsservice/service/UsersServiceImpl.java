@@ -1,6 +1,7 @@
 package org.example.userdetailsservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.userdetailsservice.controller.payload.FindByPassportDataPayload;
 import org.example.userdetailsservice.controller.payload.FindUserByDataPayload;
 import org.example.userdetailsservice.entity.User;
 import org.example.userdetailsservice.exceptions.NoSuchUserException;
@@ -64,5 +65,11 @@ public class UsersServiceImpl implements UsersService {
         } else {
             throw new NoSuchUserException("User with passport %s not found".formatted(passport));
         }
+    }
+
+    @Override
+    public User findByPassportData(FindByPassportDataPayload payload) {
+        return usersRepository.findByPassportData(payload.name(),payload.surname(),payload.patronymic(),payload.passport())
+                .orElseThrow(()->new NoSuchUserException("User with current data not found"));
     }
 }

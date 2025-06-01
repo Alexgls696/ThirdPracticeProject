@@ -38,4 +38,19 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(problemDetail);
     }
+
+    @ExceptionHandler(org.springframework.validation.BindException.class)
+    public ResponseEntity<ProblemDetail> handleBindException(org.springframework.validation.BindException exception, Locale locale) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
+                messageSource.getMessage("errors.bind", new Object[0], "errors.bind", locale));
+        problemDetail.setProperty("errors", exception
+                .getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(ObjectError::getDefaultMessage)
+                .toList());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(problemDetail);
+    }
 }

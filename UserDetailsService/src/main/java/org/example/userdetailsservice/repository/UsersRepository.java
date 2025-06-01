@@ -1,6 +1,8 @@
 package org.example.userdetailsservice.repository;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.example.userdetailsservice.entity.User;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -38,4 +40,10 @@ public interface UsersRepository extends CrudRepository<User, Integer> {
     Optional<User> findByPassport(String passport);
 
     void deleteByPassport(String passport);
+
+    @Query(value = "from User  where name = :name and surname = :surname and patronymic = :patronymic and passport = :passport")
+    Optional<User> findByPassportData(@Param("name") String name,
+                            @Param("surname")String surname,
+                            @Param("patronymic") String patronymic,
+                            @Param("passport")String passport);
 }

@@ -4,54 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Кредитная История</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 2rem;
-        }
-        h1, h2 {
-            color: #333;
-        }
-        .container {
-            background: #fff;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-        .contract {
-            border-top: 1px solid #ddd;
-            margin-top: 1rem;
-            padding-top: 1rem;
-        }
-        label, input {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        input[type="text"], input[type="email"] {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            padding: 0.6rem 1.2rem;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        pre {
-            background: #eee;
-            padding: 1rem;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <h1>Поиск Кредитной Истории</h1>
@@ -62,79 +16,11 @@
         <label>Фамилия: <input type="text" name="surname" required /></label>
         <label>Отчество: <input type="text" name="patronymic" required /></label>
         <label>Паспорт: <input type="text" name="passport" required /></label>
-        <label>Email: <input type="email" name="email" required /></label>
-        <label>ИНН: <input type="text" name="inn" required /></label>
         <button type="submit">Найти</button>
     </form>
 </div>
 
 <div class="container" id="result"></div>
-
-<script>
-    document.getElementById('searchForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const formData = new FormData(this);
-        const payload = {};
-        formData.forEach((value, key) => payload[key] = value);
-
-        const res = await fetch('http://localhost:8080/api/center/find-by-userdata', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        const data = await res.json();
-        displayResult(data);
-    });
-
-    function displayResult(data) {
-        const container = document.getElementById('result');
-        container.innerHTML = '';
-
-        const user = data.user;
-        container.innerHTML += `
-        <h2>Пользователь</h2>
-        <p><strong>${user.surname} ${user.name} ${user.patronymic}</strong></p>
-        <p>Email: ${user.email}</p>
-        <p>Паспорт: ${user.passport}</p>
-        <p>ИНН: ${user.inn}</p>
-      `;
-
-        data.contracts.forEach(contract => {
-            const contractHtml = `
-          <div class="contract">
-            <h3>Договор №${contract.contractNumber} (${contract.contractStatus})</h3>
-            <p>Банк: ${contract.bank.name}</p>
-            <p>Сумма: ${contract.originalAmount} ${contract.currency}</p>
-            <p>Ставка: ${contract.interestRate}%</p>
-            <p>Период: ${new Date(contract.startDate).toLocaleDateString()} — ${new Date(contract.endDate).toLocaleDateString()}</p>
-
-            <h4>Платежный график</h4>
-            <ul>
-              ${contract.paymentSchedules.map(sch => `
-                <li>${new Date(sch.paymentDate).toLocaleDateString()}: ${sch.paymentAmount} (${sch.status})</li>
-              `).join('')}
-            </ul>
-
-            <h4>Платежи</h4>
-            <ul>
-              ${contract.payments.map(p => `
-                <li>${new Date(p.paymentDate).toLocaleDateString()}: ${p.amount} (${p.paymentMethod})</li>
-              `).join('')}
-            </ul>
-
-            <h4>Просрочки</h4>
-            <ul>
-              ${contract.delinquencies.length > 0 ? contract.delinquencies.map(d => `
-                <li>${new Date(d.startDate).toLocaleDateString()} — ${new Date(d.endDate).toLocaleDateString()}: ${d.daysDelinquent} дней</li>
-              `).join('') : '<li>Нет</li>'}
-            </ul>
-          </div>
-        `;
-            container.innerHTML += contractHtml;
-        });
-    }
-</script>
+<script src="/js/script.js"></script>
 </body>
 </html>
