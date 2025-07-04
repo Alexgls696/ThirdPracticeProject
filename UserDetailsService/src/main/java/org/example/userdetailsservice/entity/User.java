@@ -27,15 +27,5 @@ public class User {
     @Column(name = "drivers_license")
     private String driversLicense;
 
-    public User(NewUserPayload payload) {
-        this.name = payload.name();
-        this.surname = payload.surname();
-        this.patronymic = payload.patronymic();
-        this.email = payload.email();
-        this.gender = payload.gender();
-        this.passport = payload.passport();
-        this.INN = payload.inn();
-        this.driversLicense = payload.driversLicense();
-    }
 
 }

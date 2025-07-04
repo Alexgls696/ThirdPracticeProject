@@ -71,7 +71,7 @@ public class UsersController {
                 throw new BindException(bindingResult);
             }
         }
-        var added = usersService.save(new User(payload));
+        var added = usersService.save(payload);
         return ResponseEntity
                 .created(builder.replacePath("api/users/{id}")
                         .build(Map.of("id", added.getId())))

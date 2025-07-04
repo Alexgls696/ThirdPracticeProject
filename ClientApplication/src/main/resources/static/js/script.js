@@ -1,5 +1,4 @@
-
-document.getElementById('searchForm').addEventListener('submit', async function(e) {
+document.getElementById('searchForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
@@ -13,11 +12,11 @@ document.getElementById('searchForm').addEventListener('submit', async function(
 
     const res = await fetch('http://localhost:8080/api/center/find-by-passport-data', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(payload)
     });
-    if(!res.ok){
-        if(res.status===404){
+    if (!res.ok) {
+        if (res.status === 404) {
             const error = await res.json();
             console.log(error);
             showError(error.error);
@@ -25,7 +24,11 @@ document.getElementById('searchForm').addEventListener('submit', async function(
     }
 
     const data = await res.json();
-    console.log(data);
+    if(data.contracts.length===0){
+        showWarning('Кредитная история для заданного пользователя не найдена'); return;
+    }else{
+        showSuccess("Данные успешно получены")
+    }
     displayResult(data);
 });
 
@@ -42,7 +45,15 @@ function showSuccess(message, callback) {
     });
 }
 
-// Функция для отображения уведомления об ошибке
+function showWarning(message) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Внимание',
+        text: message,
+        confirmButtonText: 'Понятно',
+    });
+}
+
 function showError(message) {
     Swal.fire({
         icon: 'error',
@@ -64,7 +75,6 @@ function displayResult(data) {
         <p>Паспорт: ${user.passport}</p>
         <p>ИНН: ${user.inn}</p>
       `;
-
     data.contracts.forEach(contract => {
         const contractHtml = `
           <div class="contract">

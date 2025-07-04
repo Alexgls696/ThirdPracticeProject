@@ -3,6 +3,7 @@ package org.example.userdetailsservice.service;
 import lombok.RequiredArgsConstructor;
 import org.example.userdetailsservice.controller.payload.FindByPassportDataPayload;
 import org.example.userdetailsservice.controller.payload.FindUserByDataPayload;
+import org.example.userdetailsservice.controller.payload.NewUserPayload;
 import org.example.userdetailsservice.entity.User;
 import org.example.userdetailsservice.exceptions.NoSuchUserException;
 import org.example.userdetailsservice.repository.UsersRepository;
@@ -13,6 +14,19 @@ import org.springframework.stereotype.Service;
 public class UsersServiceImpl implements UsersService {
     private final UsersRepository usersRepository;
 
+    private User createUserByUserDataPayload(NewUserPayload payload) {
+        User user = new User();
+        user.setName(payload.name());
+        user.setSurname(payload.surname());
+        user.setINN(payload.inn());
+        user.setPassport(payload.passport());
+        user.setPatronymic(payload.patronymic());
+        user.setEmail(payload.email());
+        user.setGender(payload.gender());
+        user.setDriversLicense(payload.driversLicense());
+        return user;
+    }
+
 
     @Override
     public Iterable<User> findAll() {
@@ -20,8 +34,9 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public User save(User user) {
-        return usersRepository.save(user);
+    public User save(NewUserPayload payload) {
+        User creatingUser = createUserByUserDataPayload(payload);
+        return usersRepository.save(creatingUser);
     }
 
     @Override
@@ -69,7 +84,7 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public User findByPassportData(FindByPassportDataPayload payload) {
-        return usersRepository.findByPassportData(payload.name(),payload.surname(),payload.patronymic(),payload.passport())
-                .orElseThrow(()->new NoSuchUserException("User with current data not found"));
+        return usersRepository.findByPassportData(payload.name(), payload.surname(), payload.patronymic(), payload.passport())
+                .orElseThrow(() -> new NoSuchUserException("User with current data not found"));
     }
 }

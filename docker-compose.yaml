@@ -19,24 +19,6 @@ services:
       timeout: 10s
       retries: 5
 
-  user-details-service:
-    build:
-      context: ./UserDetailsService #Путь к docker-file
-    image: user-details-app #имя образа в результате сборки
-
-    environment:
-      DB_NAME: ${DB_NAME}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "8081:8081"
-    depends_on:
-      user-details-db:
-        condition: service_healthy
-    networks:
-      - services-network
-
-
   credit-story-db:
     image: postgres:16
     restart: always
@@ -56,6 +38,24 @@ services:
 
     networks:
       services-network:
+
+
+  user-details-service:
+    build:
+      context: ./UserDetailsService #Путь к docker-file
+    image: user-details-app #имя образа в результате сборки
+
+    environment:
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8081:8081"
+    depends_on:
+      user-details-db:
+        condition: service_healthy
+    networks:
+      - services-network
 
   credit-story-service:
     build:
@@ -94,7 +94,7 @@ services:
       USER_DETAILS_SERVICE_URL: ${USER_DETAILS_SERVICE_URL}
       CREDIT_STORY_SERVICE_URL: ${CREDIT_STORY_SERVICE_URL}
     ports:
-      - "80:8083"
+      - "8090:8090"
 
 volumes:
   user_details_data:

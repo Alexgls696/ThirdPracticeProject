@@ -61,22 +61,12 @@ public class UserDetailsRestClientImpl implements UserDetailsRestClient {
                     .retrieve()
                     .body(User.class);
         } catch (HttpClientErrorException.BadRequest badRequestException) {
-            String response = badRequestException.getResponseBodyAsString();
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                JsonNode jsonNode = objectMapper.readTree(response);
-                JsonNode errors = jsonNode.get("errors");
-                List<String> errorsList = new ArrayList<>();
-                if (errors != null && errors.isArray()) {
+            List<String> errorsList = (List<String>) badRequestException
+                    .getResponseBodyAs(ProblemDetail.class)
+                    .getProperties()
+                    .get("errors");
 
-                    for (JsonNode error : errors) {
-                        errorsList.add(error.asText());
-                    }
-                }
-                throw new BindException("Ошибка валидации данных", errorsList);
-            } catch (IOException exception) {
-                throw new BindException("Ошибка валидации данных", List.of());
-            }
+            throw new BindException("Ошибка валидации данных", errorsList);
         } catch (HttpClientErrorException.NotFound exception) {
             throw new NoSuchUserException("Пользователь с такими данными не найден");
         }
@@ -110,8 +100,7 @@ public class UserDetailsRestClientImpl implements UserDetailsRestClient {
                     .getProperties()
                     .get("errors");
             throw new BindException("Ошибка валидации данных", errors);
-        }
-        catch (HttpClientErrorException.NotFound exception) {
+        } catch (HttpClientErrorException.NotFound exception) {
             throw new NoSuchUserException("Пользователь с заданными данными не найден");
         }
     }

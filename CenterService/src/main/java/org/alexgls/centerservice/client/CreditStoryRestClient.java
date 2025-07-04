@@ -2,6 +2,8 @@ package org.alexgls.centerservice.client;
 
 import org.alexgls.centerservice.entity.CreditContract;
 
+import java.util.List;
+
 public interface CreditStoryRestClient {
-    Iterable<CreditContract>findCreditContractsByUserId(int userId);
+    List<CreditContract> findCreditContractsByUserId(int userId);
 }

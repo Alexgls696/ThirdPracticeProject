@@ -2,6 +2,7 @@ package org.alexgls.centerservice.exception_handling;
 
 import lombok.RequiredArgsConstructor;
 import org.alexgls.centerservice.client.exception.BindException;
+import org.alexgls.centerservice.client.exception.NoSuchCreditStoryException;
 import org.alexgls.centerservice.client.exception.NoSuchUserException;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleNoSuchUserException(NoSuchUserException exception, Locale locale) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
                 messageSource.getMessage("errors.user_not_found", new Object[0], "errors.user_not_found", locale));
+        problemDetail.setProperty("error", exception.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(problemDetail);
+    }
+
+    @ExceptionHandler(NoSuchCreditStoryException.class)
+    public ResponseEntity<ProblemDetail> handleNoSuchCreditStoryException(NoSuchCreditStoryException exception, Locale locale) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND,
+                messageSource.getMessage("errors.credit_story_not_found", new Object[0], "errors.credit_story_not_found", locale));
         problemDetail.setProperty("error", exception.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
@@ -53,4 +64,5 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(problemDetail);
     }
+
 }

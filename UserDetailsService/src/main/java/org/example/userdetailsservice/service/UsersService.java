@@ -3,12 +3,13 @@ package org.example.userdetailsservice.service;
 import jakarta.validation.Valid;
 import org.example.userdetailsservice.controller.payload.FindByPassportDataPayload;
 import org.example.userdetailsservice.controller.payload.FindUserByDataPayload;
+import org.example.userdetailsservice.controller.payload.NewUserPayload;
 import org.example.userdetailsservice.entity.User;
 
 public interface UsersService {
     Iterable<User> findAll();
 
-    User save(User user);
+    User save(NewUserPayload newUserPayload);
 
     User findUserByData(FindUserByDataPayload payload);
 

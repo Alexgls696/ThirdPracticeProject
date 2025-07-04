@@ -34,10 +34,10 @@ public class CreditContract {
 
     private Bank bank;
 
-    private Iterable<DelinquencyHistory>delinquencies;
+    private Iterable<DelinquencyHistory> delinquencies;
 
-    private Iterable<Payment>payments;
+    private Iterable<Payment> payments;
 
-    private Iterable<PaymentSchedule>paymentSchedules;
+    private Iterable<PaymentSchedule> paymentSchedules;
 
 }
