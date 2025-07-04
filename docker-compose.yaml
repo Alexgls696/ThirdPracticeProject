@@ -85,6 +85,9 @@ services:
       - "8080:8080"
     networks:
       services-network:
+    depends_on:
+      - user-details-service
+      - credit-story-service
 
   client-application:
     build:

@@ -2,6 +2,5 @@ server:
   port: 8080
 
 services:
-  user-details-service-url: http://localhost:8081/
-  credit-story-service-url: http://localhost:8082/
-
+  user-details-service-url: http://user-details-service:8081/
+  credit-story-service-url: http://credit-story-service:8082/
