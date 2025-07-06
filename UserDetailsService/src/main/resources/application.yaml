@@ -3,6 +3,7 @@ server:
 
 spring:
   datasource:
-    url: "jdbc:postgresql://user-details-db:5432/${DB_NAME:user_details}"
+    url: "${DB_URL}"
     username: "${DB_USERNAME:alexgls}"
-    password: "${DB_PASSWORD:AS04SERa1}"
+    password: "${DB_PASSWORD}"
+
