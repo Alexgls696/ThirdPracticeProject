@@ -45,9 +45,9 @@ services:
     image: user-details-app #имя образа в результате сборки
 
     environment:
-      DB_URL: ${USER_DETAILS_DB_URL}
-      DB_USERNAME: ${ALL_DB_USERNAME}
-      DB_PASSWORD: ${ALL_DB_PASSWORD}
+      USER_DETAILS_DB_URL: ${USER_DETAILS_DB_URL}
+      ALL_DB_USERNAME: ${ALL_DB_USERNAME}
+      ALL_DB_PASSWORD: ${ALL_DB_PASSWORD}
     ports:
       - "8081:8081"
     depends_on:
@@ -62,8 +62,8 @@ services:
     image: credit-story-app
     environment:
       CREDIT_STORY_DB_URL: ${CREDIT_STORY_DB_URL}
-      CREDIT_STORY_DB_USER: ${ALL_DB_USERNAME}
-      CREDIT_STORY_DB_PASSWORD: ${ALL_DB_PASSWORD}
+      ALL_DB_USERNAME: ${ALL_DB_USERNAME}
+      ALL_DB_PASSWORD: ${ALL_DB_PASSWORD}
     ports:
       - "8082:8082"
     depends_on:
