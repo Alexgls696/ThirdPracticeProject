@@ -3,7 +3,7 @@ server:
 
 spring:
   datasource:
-    url: "${DB_URL}"
-    username: "${DB_USERNAME:alexgls}"
-    password: "${DB_PASSWORD}"
+    url: "${USER_DETAILS_DB_URL}"
+    username: "${ALL_DB_USERNAME:alexgls}"
+    password: "${ALL_DB_PASSWORD}"
 

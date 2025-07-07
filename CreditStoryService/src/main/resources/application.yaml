@@ -4,5 +4,5 @@ server:
 spring:
   datasource:
     url: "${CREDIT_STORY_DB_URL}"
-    username: "${CREDIT_STORY_DB_USER:alexgls}"
-    password: "${CREDIT_STORY_DB_PASSWORD}"
+    username: "${ALL_DB_USERNAME:alexgls}"
+    password: "${ALL_DB_PASSWORD}"

@@ -12,6 +12,8 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @RestControllerAdvice
@@ -62,6 +64,18 @@ public class GlobalExceptionHandler {
                 .toList());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(problemDetail);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ProblemDetail> handleException(Exception exception, Locale locale) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,messageSource
+                .getMessage("errors.global_exception",new Object[0], "errors.global_exception", locale));
+        List<String> errors = new ArrayList<>();
+        errors.add(exception.getMessage());
+        problemDetail.setProperty("errors", errors);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(problemDetail);
     }
 

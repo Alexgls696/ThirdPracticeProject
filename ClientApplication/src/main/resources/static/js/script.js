@@ -1,35 +1,70 @@
 document.getElementById('searchForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const formData = new FormData(this);
-    const payload = {
-        name: formData.get("name"),
-        surname: formData.get("surname"),
-        patronymic: formData.get("patronymic"),
-        passport: formData.get("passport")
-    };
-
-
-    const res = await fetch('http://localhost:8080/api/center/find-by-passport-data', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-    });
-    if (!res.ok) {
-        if (res.status === 404) {
-            const error = await res.json();
-            console.log(error);
-            showError(error.error);
+    // Показываем анимацию загрузки
+    const loadingSwal = Swal.fire({
+        title: 'Загрузка данных',
+        html: 'Пожалуйста, подождите...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
         }
-    }
+    });
 
-    const data = await res.json();
-    if(data.contracts.length===0){
-        showWarning('Кредитная история для заданного пользователя не найдена'); return;
-    }else{
-        showSuccess("Данные успешно получены")
+    try {
+        const formData = new FormData(this);
+        const payload = {
+            name: formData.get("name"),
+            surname: formData.get("surname"),
+            patronymic: formData.get("patronymic"),
+            passport: formData.get("passport")
+        };
+
+        const res = await fetch('http://localhost:8080/api/center/find-by-passport-data', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        });
+
+        await loadingSwal.close();
+
+        if (!res.ok) {
+            let errorMessage = 'На сервере произошла ошибка';
+            let errorDetails = '';
+
+            try {
+                const errorData = await res.json();
+                if (errorData.detail) {
+                    errorMessage = errorData.detail;
+                } else if (errorData.title) {
+                    errorMessage = errorData.title;
+                }
+                if (Array.isArray(errorData.errors)) {
+                    errorDetails = errorData.errors.join('\n');
+                }
+
+            } catch (e) {
+                console.error('Ошибка парсинга ответа сервера:', e);
+            }
+            showError(errorMessage, errorDetails);
+            return;
+        }
+
+        const data = await res.json();
+
+        if(data.contracts.length === 0) {
+            showWarning('Кредитная история для заданного пользователя не найдена');
+            return;
+        }
+
+        showSuccess("Данные успешно получены");
+        displayResult(data);
+
+    } catch (error) {
+        await loadingSwal.close();
+        console.error('Ошибка при выполнении запроса:', error);
+        showError('Произошла ошибка при соединении с сервером');
     }
-    displayResult(data);
 });
 
 function showSuccess(message, callback) {
@@ -54,11 +89,11 @@ function showWarning(message) {
     });
 }
 
-function showError(message) {
+function showError(message,details) {
     Swal.fire({
         icon: 'error',
         title: 'Ошибка',
-        text: message,
+        text: `${message}\n${details}`,
         confirmButtonText: 'ОК'
     });
 }
